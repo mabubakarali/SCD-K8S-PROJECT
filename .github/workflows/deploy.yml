@@ -7,25 +7,33 @@ on:
 
 jobs:
   build-deploy:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
       - name: Log in to Docker Hub
-        run: |
-          echo "DockerAb26." | docker login -u "abubakaraly" --password-stdin
+        run: echo "DockerAb26." | docker login -u "abubakaraly" --password-stdin
 
       - name: Build Docker image
-        run: docker build -t "abubakaraly/my-app:latest" .
+        run: docker build -t abubakaraly/my-app:latest .
 
       - name: Push Docker image to Docker Hub
-        run: docker push "abubakaraly/my-app:latest"
+        run: docker push abubakaraly/my-app:latest
 
-      - name: Use Minikube Docker daemon
+      - name: Install Minikube
         run: |
-          & minikube -p minikube docker-env --shell powershell | Invoke-Expression
+          curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+          sudo install minikube-linux-amd64 /usr/local/bin/minikube
+
+      - name: Start Minikube
+        run: |
+          minikube start --driver=docker
+          kubectl config use-context minikube
 
       - name: Deploy to Minikube
         run: |
