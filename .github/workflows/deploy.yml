@@ -15,13 +15,13 @@ jobs:
 
       - name: Log in to Docker Hub
         run: |
-          echo "your_docker_password" | docker login -u "your_docker_username" --password-stdin
+          echo "DockerAb26." | docker login -u "abubakaraly" --password-stdin
 
       - name: Build Docker image
-        run: docker build -t "your_docker_username/my-app:latest" .
+        run: docker build -t "abubakaraly/my-app:latest" .
 
       - name: Push Docker image to Docker Hub
-        run: docker push "your_docker_username/my-app:latest"
+        run: docker push "abubakaraly/my-app:latest"
 
       - name: Use Minikube Docker daemon
         run: |
